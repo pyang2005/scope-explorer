@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { SigningDialog } from "@/components/signing/SigningDialog";
 import {
   Search,
   FileText,
@@ -27,6 +27,7 @@ import {
   Download,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface SigningTask {
   id: string;
@@ -138,6 +139,18 @@ const modeConfig = {
 export default function Signing() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("pending");
+  const [signingDialogOpen, setSigningDialogOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<SigningTask | null>(null);
+
+  const handleSignClick = (task: SigningTask) => {
+    setSelectedTask(task);
+    setSigningDialogOpen(true);
+  };
+
+  const handleSigningComplete = () => {
+    toast.success(`文档 "${selectedTask?.title}" 签署成功！`);
+    setSelectedTask(null);
+  };
 
   const filteredTasks = mockTasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -261,7 +274,10 @@ export default function Signing() {
                           {status.label}
                         </Badge>
                         {task.status === "pending" && (
-                          <Button className="bg-gradient-accent shadow-accent-glow gap-2">
+                          <Button 
+                            className="bg-gradient-accent shadow-accent-glow gap-2"
+                            onClick={() => handleSignClick(task)}
+                          >
                             <PenTool className="h-4 w-4" />
                             立即签署
                             <ArrowRight className="h-4 w-4" />
@@ -309,6 +325,14 @@ export default function Signing() {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Signing Dialog */}
+        <SigningDialog
+          open={signingDialogOpen}
+          onOpenChange={setSigningDialogOpen}
+          documentTitle={selectedTask?.title}
+          onComplete={handleSigningComplete}
+        />
       </div>
     </AppLayout>
   );
