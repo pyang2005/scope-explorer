@@ -30,6 +30,9 @@ import {
   List,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CreateTemplateDialog } from "@/components/templates/CreateTemplateDialog";
+import { TemplateViewDialog } from "@/components/templates/TemplateViewDialog";
+import { toast } from "sonner";
 
 interface Template {
   id: string;
@@ -111,12 +114,28 @@ export default function Templates() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedCategory, setSelectedCategory] = useState("全部");
   const [searchQuery, setSearchQuery] = useState("");
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
   const filteredTemplates = mockTemplates.filter((template) => {
     const matchesCategory = selectedCategory === "全部" || template.category === selectedCategory;
     const matchesSearch = template.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleViewTemplate = (template: Template) => {
+    setSelectedTemplate(template);
+    setViewDialogOpen(true);
+  };
+
+  const handleCopyTemplate = (template: Template) => {
+    toast.success(`模板 "${template.name}" 已复制`);
+  };
+
+  const handleDeleteTemplate = (template: Template) => {
+    toast.success(`模板 "${template.name}" 已删除`);
+  };
 
   return (
     <AppLayout>
@@ -127,7 +146,10 @@ export default function Templates() {
             <h1 className="text-2xl font-bold text-foreground">模板管理</h1>
             <p className="text-muted-foreground">管理和创建文档模板，支持分类和版本控制</p>
           </div>
-          <Button className="bg-gradient-primary shadow-glow">
+          <Button 
+            className="bg-gradient-primary shadow-glow"
+            onClick={() => setCreateDialogOpen(true)}
+          >
             <Plus className="mr-2 h-4 w-4" />
             新建模板
           </Button>
@@ -195,11 +217,19 @@ export default function Templates() {
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                     <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2 p-4 opacity-0 transition-opacity group-hover:opacity-100">
-                      <Button size="sm" variant="secondary">
+                      <Button 
+                        size="sm" 
+                        variant="secondary"
+                        onClick={() => handleViewTemplate(template)}
+                      >
                         <Eye className="mr-1 h-3 w-3" />
                         预览
                       </Button>
-                      <Button size="sm" className="bg-gradient-primary">
+                      <Button 
+                        size="sm" 
+                        className="bg-gradient-primary"
+                        onClick={() => handleViewTemplate(template)}
+                      >
                         使用
                       </Button>
                     </div>
@@ -219,15 +249,22 @@ export default function Templates() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleViewTemplate(template)}>
+                            <Eye className="mr-2 h-4 w-4" />
+                            查看
+                          </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Edit className="mr-2 h-4 w-4" />
                             编辑
                           </DropdownMenuItem>
-                          <DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleCopyTemplate(template)}>
                             <Copy className="mr-2 h-4 w-4" />
                             复制
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
+                          <DropdownMenuItem 
+                            className="text-destructive"
+                            onClick={() => handleDeleteTemplate(template)}
+                          >
                             <Trash2 className="mr-2 h-4 w-4" />
                             删除
                           </DropdownMenuItem>
@@ -304,7 +341,12 @@ export default function Templates() {
                       <td className="px-4 py-3 text-sm text-muted-foreground">{template.createdAt}</td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8"
+                            onClick={() => handleViewTemplate(template)}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -317,11 +359,14 @@ export default function Templates() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleCopyTemplate(template)}>
                                 <Copy className="mr-2 h-4 w-4" />
                                 复制
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="text-destructive">
+                              <DropdownMenuItem 
+                                className="text-destructive"
+                                onClick={() => handleDeleteTemplate(template)}
+                              >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 删除
                               </DropdownMenuItem>
@@ -336,6 +381,18 @@ export default function Templates() {
             </table>
           </div>
         )}
+
+
+        {/* Dialogs */}
+        <CreateTemplateDialog 
+          open={createDialogOpen} 
+          onOpenChange={setCreateDialogOpen}
+        />
+        <TemplateViewDialog
+          open={viewDialogOpen}
+          onOpenChange={setViewDialogOpen}
+          template={selectedTemplate}
+        />
       </div>
     </AppLayout>
   );
