@@ -13,73 +13,65 @@ import {
   ChevronLeft,
   ChevronRight,
   FileCheck,
-  Search,
   BarChart3,
 } from "lucide-react";
-
-const mainNavItems = [
-  {
-    title: "仪表盘",
-    titleEn: "Dashboard",
-    href: "/",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "模板管理",
-    titleEn: "Templates",
-    href: "/templates",
-    icon: FileText,
-  },
-  {
-    title: "文档起草",
-    titleEn: "Draft",
-    href: "/draft",
-    icon: FilePlus,
-  },
-  {
-    title: "签署中心",
-    titleEn: "Sign",
-    href: "/signing",
-    icon: PenTool,
-  },
-  {
-    title: "归档检索",
-    titleEn: "Archive",
-    href: "/archive",
-    icon: Archive,
-  },
-  {
-    title: "报表分析",
-    titleEn: "Reports",
-    href: "/reports",
-    icon: BarChart3,
-  },
-];
-
-const adminNavItems = [
-  {
-    title: "用户管理",
-    titleEn: "Users",
-    href: "/admin/users",
-    icon: Users,
-  },
-  {
-    title: "权限设置",
-    titleEn: "Permissions",
-    href: "/admin/permissions",
-    icon: Shield,
-  },
-  {
-    title: "系统设置",
-    titleEn: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
-  },
-];
+import { useLanguage } from "@/i18n";
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const mainNavItems = [
+    {
+      title: t.nav.dashboard,
+      href: "/",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t.nav.templates,
+      href: "/templates",
+      icon: FileText,
+    },
+    {
+      title: t.nav.draft,
+      href: "/draft",
+      icon: FilePlus,
+    },
+    {
+      title: t.nav.signing,
+      href: "/signing",
+      icon: PenTool,
+    },
+    {
+      title: t.nav.archive,
+      href: "/archive",
+      icon: Archive,
+    },
+    {
+      title: t.nav.reports,
+      href: "/reports",
+      icon: BarChart3,
+    },
+  ];
+
+  const adminNavItems = [
+    {
+      title: t.nav.users,
+      href: "/admin/users",
+      icon: Users,
+    },
+    {
+      title: t.nav.permissions,
+      href: "/admin/permissions",
+      icon: Shield,
+    },
+    {
+      title: t.nav.settings,
+      href: "/admin/settings",
+      icon: Settings,
+    },
+  ];
 
   return (
     <aside
@@ -96,8 +88,8 @@ export function AppSidebar() {
           </div>
           {!collapsed && (
             <div className="animate-fade-in">
-              <h1 className="text-lg font-bold text-sidebar-foreground">EasySign</h1>
-              <p className="text-xs text-sidebar-foreground/60">文档签署系统</p>
+              <h1 className="text-lg font-bold text-sidebar-foreground">{t.sidebar.appName}</h1>
+              <p className="text-xs text-sidebar-foreground/60">{t.sidebar.tagline}</p>
             </div>
           )}
         </div>
@@ -108,7 +100,7 @@ export function AppSidebar() {
         <div className="mb-2">
           {!collapsed && (
             <span className="px-3 text-xs font-medium uppercase tracking-wider text-sidebar-foreground/50">
-              主要功能
+              {t.nav.mainFeatures}
             </span>
           )}
         </div>
@@ -142,11 +134,11 @@ export function AppSidebar() {
         <div className="mb-2">
           {!collapsed && (
             <span className="px-3 text-xs font-medium uppercase tracking-wider text-sidebar-foreground/50">
-              系统管理
+              {t.nav.systemAdmin}
             </span>
           )}
         </div>
-        {adminNavItems.map((item, index) => (
+        {adminNavItems.map((item) => (
           <NavLink
             key={item.href}
             to={item.href}

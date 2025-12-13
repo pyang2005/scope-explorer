@@ -1,63 +1,58 @@
 import { FilePlus, FileText, Upload, QrCode, Search, PenTool } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface QuickAction {
-  icon: React.ElementType;
-  label: string;
-  description: string;
-  href: string;
-  gradient: string;
-}
-
-const quickActions: QuickAction[] = [
-  {
-    icon: FilePlus,
-    label: "新建文档",
-    description: "基于模板创建新文档",
-    href: "/draft",
-    gradient: "from-primary to-primary/70",
-  },
-  {
-    icon: Upload,
-    label: "上传文件",
-    description: "导入已有文件进行签署",
-    href: "/draft?mode=upload",
-    gradient: "from-info to-info/70",
-  },
-  {
-    icon: PenTool,
-    label: "快速签署",
-    description: "处理待签署文档",
-    href: "/signing",
-    gradient: "from-accent to-accent/70",
-  },
-  {
-    icon: QrCode,
-    label: "扫码验真",
-    description: "验证文档真伪",
-    href: "/verify",
-    gradient: "from-success to-success/70",
-  },
-  {
-    icon: Search,
-    label: "文档检索",
-    description: "搜索历史归档文档",
-    href: "/archive",
-    gradient: "from-warning to-warning/70",
-  },
-  {
-    icon: FileText,
-    label: "模板中心",
-    description: "管理文档模板",
-    href: "/templates",
-    gradient: "from-destructive to-destructive/70",
-  },
-];
+import { useLanguage } from "@/i18n";
 
 export function QuickActions() {
+  const { t } = useLanguage();
+
+  const quickActions = [
+    {
+      icon: FilePlus,
+      label: t.quickActions.newDocument,
+      description: t.quickActions.newDocumentDesc,
+      href: "/draft",
+      gradient: "from-primary to-primary/70",
+    },
+    {
+      icon: Upload,
+      label: t.quickActions.uploadFile,
+      description: t.quickActions.uploadFileDesc,
+      href: "/draft?mode=upload",
+      gradient: "from-info to-info/70",
+    },
+    {
+      icon: PenTool,
+      label: t.quickActions.quickSign,
+      description: t.quickActions.quickSignDesc,
+      href: "/signing",
+      gradient: "from-accent to-accent/70",
+    },
+    {
+      icon: QrCode,
+      label: t.quickActions.verifyDoc,
+      description: t.quickActions.verifyDocDesc,
+      href: "/verify",
+      gradient: "from-success to-success/70",
+    },
+    {
+      icon: Search,
+      label: t.quickActions.searchDocs,
+      description: t.quickActions.searchDocsDesc,
+      href: "/archive",
+      gradient: "from-warning to-warning/70",
+    },
+    {
+      icon: FileText,
+      label: t.quickActions.templateCenter,
+      description: t.quickActions.templateCenterDesc,
+      href: "/templates",
+      gradient: "from-destructive to-destructive/70",
+    },
+  ];
+
   return (
     <div className="animate-slide-up" style={{ animationDelay: "100ms" }}>
-      <h2 className="mb-4 text-lg font-semibold text-foreground">快速操作</h2>
+      <h2 className="mb-4 text-lg font-semibold text-foreground">{t.quickActions.title}</h2>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
         {quickActions.map((action, index) => (
           <a
