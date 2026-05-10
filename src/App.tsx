@@ -10,6 +10,7 @@ import Draft from "./pages/Draft";
 import Signing from "./pages/Signing";
 import Archive from "./pages/Archive";
 import Reports from "./pages/Reports";
+import Organization from "./pages/Organization";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/signing" element={<Signing />} />
             <Route path="/archive" element={<Archive />} />
             <Route path="/reports" element={<Reports />} />
+            <Route path="/admin/organization" element={<Organization />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

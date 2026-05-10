@@ -14,6 +14,7 @@ import {
   ChevronRight,
   FileCheck,
   BarChart3,
+  Building2,
 } from "lucide-react";
 import { useLanguage } from "@/i18n";
 
@@ -56,6 +57,11 @@ export function AppSidebar() {
   ];
 
   const adminNavItems = [
+    {
+      title: t.nav.organization,
+      href: "/admin/organization",
+      icon: Building2,
+    },
     {
       title: t.nav.users,
       href: "/admin/users",
